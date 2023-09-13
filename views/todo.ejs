@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>To Do List</title>
+</head>
+<body>
+    <div class="todoContainer">
+        <header>
+            <h1>To Do List</h1>
+        </header>
+        <div class="todo">
+            <form action="/" method="POST" class="todoHeader">
+                <input type="text" name="content" id="content">
+                <input type="submit" value="Ajouter">
+            </form>
+            <ul class="todoList">
+                <% todoTasks.forEach(details => { %>
+                    <% if(details._id == idTask)  { %>
+                        <li class="todoListItem">
+                            <form action="/edit/<%= details._id %>" method="POST">
+                                <input type="text" name="content" id="content">
+                                <input type="submit" value="Confirmer">
+                                <a href="/" class="cancel">Annuler</a>
+                            </form>
+                            <div class="todoListItemName">Text</div>
+                            <a href="" class="edit"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a href="" class="remove"><i class="fa-solid fa-trash"></i></a>
+                        </li>
+                    <% } else { %>
+                        <li class="todoListItem">
+                            <div class="todoListItemName">Text</div>
+                            <a href="/edit/<%= details._id %>" class="edit"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a href="/remove/<%= details._id %>" class="remove"><i class="fa-solid fa-trash"></i></a>
+                        </li>
+                    <% } %>
+                    <% }) %>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
