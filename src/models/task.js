@@ -16,9 +16,10 @@ const taskSchema = new mongoose.Schema( {
     },
 },
 {
+    // Pour afficher la date de création et la date de mise à jour
     timestamps: true,
 });
 
-const Task = mongoose.model('Task', todoTaskSchema);
+const Task = mongoose.model('Task', taskSchema);
 
 export default Task;

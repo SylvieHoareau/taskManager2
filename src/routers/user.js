@@ -1,10 +1,12 @@
 import express from 'express';
 import sharp from 'sharp';
-import router from 'router';
 import multer from 'multer';
-import User from ('../models/user.js');
-import auth from ('../middleware/auth.js');
-import { sendWelcomeEmail, sendCancelationEmail } from ('../emails/account.js');
+import User from '../models/user.js';
+import auth from '../middleware/auth.js';
+import { sendWelcomeEmail, sendCancelationEmail } from '../emails/account.js';
+
+// Import du module router
+const router = express.Router;
 
 // CREATE - Créer un nouvel utilisateur
 router.post('/users', async (req, res) => {
