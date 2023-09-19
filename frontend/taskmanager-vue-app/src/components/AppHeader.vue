@@ -1,7 +1,6 @@
 <template>
    <header>
-      <h1>{{ msg }}</h1>
-      <font-awesome-icon icon="fa-solid fa-circle-user" />
+      <h1>{{ msg }}<font-awesome-icon icon="fa-solid fa-circle-user" /></h1>
    </header>
 </template>
   
@@ -32,7 +31,7 @@
         font-size: 5rem;
     }
 
-    .font-awesome-icon {
+    font-awesome-icon {
         font-size: 5rem;
     }
 

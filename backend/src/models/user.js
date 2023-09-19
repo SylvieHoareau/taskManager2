@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema( {
         type: String, 
         required: true, 
         // Password contient au minumum 7 caractères
-        minLength: 7,
+        minlength: 7,
     },
     tokens: [{
         token: {
@@ -45,18 +45,19 @@ const userSchema = new mongoose.Schema( {
     avatar: {
         type: Buffer,
     }, 
-    timestamps: true,
+    }, {
+        timestamps: true,
 });
 
 // Lien entre le modèle de tâche et l'authentification de l'utilisateur
 userSchema.virtual('tasks', {
     ref: "Task",
-    localfield: "_id",
+    localField: "_id",
     foreignField: "owner",
 });
 
 userSchema.statics.findCredentials = async(email, password) => {
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
     // S'il n'y a pas d'utilisateur
     if (!user) {
         throw new Error("Login immpossible. Voir plus de détails.")
@@ -88,7 +89,7 @@ userSchema.methods.toJSON = () => {
 }
 
 // Sécuriser le mot de passe avant de l'envoyer
-userSchema.pre('save', async() => {
+userSchema.pre('save', async(next) => {
     const user = this;
     await Task.deleteMany( {owner: user._id});
     next();

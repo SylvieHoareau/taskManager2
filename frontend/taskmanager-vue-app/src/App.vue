@@ -2,9 +2,10 @@
   <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
   <AppHeader msg="TO DO LIST"></AppHeader>
   <div>
+    <!--@task-added : pour écouter l'événement "task-added" -->
     <task-form @task-added="addTaskToList"></task-form>
     <h2>Ma liste de tâches</h2>
-    <task-list :tasks="tasks"></task-list>
+    <task-list :msg="YourMessage" :tasks="tasks"></task-list>
   </div>
 </template>
 
@@ -22,6 +23,7 @@
     },
     data() {
       return {
+        msg: 'TO DO LIST',
         tasks : [], // Liste de tâches
       }
     }, 
@@ -29,6 +31,9 @@
       addTaskToList(newTask) {
         // Ajouter la nouvelle tâche à la liste de tâche
         this.tasks.push({text: newTask, id: this.tasks.length + 1});
+      }, 
+      upadateTasks(newTasks) {
+        this.tasks = newTasks;
       }
     }
   }
@@ -115,4 +120,6 @@
     padding: 1em;
     font-size: 1.5em;
   }
+
+  
 </style>
