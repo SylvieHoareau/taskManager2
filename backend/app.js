@@ -89,11 +89,11 @@ app.get('/style.css', (req, res) => {
 app.get('/', (req, res) => {
     const data = {
         tasks : [
-            {id: 1, titre: 'Tâche 1', completed: true, owner:"sylvie"},
-            {id: 2, titre: 'Tâche 2', completed: true, owner: "sylvie"},
-            {id: 3, titre: 'Tâche 3', completed: true, owner: "sylvie"},
+            {id: 1, titre: 'Apprendre NODE JS', completed: true, owner:"sylvie"},
+            {id: 2, titre: 'Apprendre VUE JS', completed: true, owner: "sylvie"},
+            {id: 3, titre: 'Apprendre à apprendre', completed: true, owner: "sylvie"},
         ]
-    };
+    }
     res.render('index', data); // Rend la page index.ejs
 });
 
