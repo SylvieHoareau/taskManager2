@@ -71,6 +71,33 @@ li a {
     margin: 1em;
 }
 
+.oneTask {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: flex-start;
+    gap: 1em;
+    width: 20em;
+    background-color: var(--tertiary-color);
+    margin: 1em;
+    padding: 1em;
+}
+
+#taskOwner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: flex-start;
+    gap: 1em;
+    width: 20em;
+    color: black;
+    background-color: var(--accent-color);
+    margin: 1em;
+    padding: 1em;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -78,6 +105,7 @@ form {
     align-content: center;
     justify-content: center;
     gap: 1em;
+    width: 100%;
 }
 
 input {
@@ -152,9 +180,9 @@ a {
 }
 
 button {
-    color: var(--bg-color);
-    background-color: var(--primary-color);
-    border: 0.25 em solid black;
+    color: white;
+    background-color: black;
+    border: none;
     border-radius: 1em;
     text-transform: uppercase;
     cursor: pointer;
@@ -165,4 +193,17 @@ button {
 button:hover {
     color: var(--bg-color);
     background-color: var(--secondary-color);
+}
+
+@media screen and (min-width: 320px) and (max-width: 1024px){
+    li {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        gap: 1em;
+        width: 100%;
+    }
+    
 }

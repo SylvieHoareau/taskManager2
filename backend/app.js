@@ -7,8 +7,15 @@ import ejs from 'ejs';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import Task from './src/models/task.js';
-import { taskRouter } from './src/routers/task.js';
-import { userRouter } from './src/routers/user.js';
+// import { check, validationResult } from 'validator';
+import pkg from 'validator';
+const { check, validationResult } = pkg;
+// import { taskRouter } from './src/routers/task.js';
+// import { userRouter } from './src/routers/user.js';
+
+/**
+ * Partie 1 : Configuration et initialisation
+ * */
 
 dotenv.config();
 
@@ -19,13 +26,21 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+/**
+ * Partie 2 : middleware et traitement des requêtes
+ * */
+
 // Middleware pour traiter les données JSON
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Dans l'application, middleware pour le gestionnaire de routes
 app.use(express.json());
-app.use(userRouter);
-app.use(taskRouter);
+// app.use(userRouter);
+// app.use(taskRouter);
+
+// Configuration pour pouvoir accéder aux fichiers statiques depuis le dossier views
+app.use(express.static(path.join(__dirname, 'views')));
 
 // Connexion à la base de données MongoDB
 mongoose.connect('mongodb+srv://admin:admin@localhost.7tofdzv.mongodb.net/', {useNewUrlParser: true, useUnifiedTopology: true})
@@ -36,76 +51,19 @@ mongoose.connect('mongodb+srv://admin:admin@localhost.7tofdzv.mongodb.net/', {us
         console.error('Erreur de connexion à la base de données MongoDB', error);
     });
 
-
-// CREATE - Définir la route pour gérer les requêtes de l'interface
-app.post('/tasks', async (req, res) => {
-    try {
-        const { titre, completed, owner } = req.body;
-
-        // Insérer la tâche dans la base de données
-        const task = new Task({titre, completed, owner});
-        const savedTask = await task.save();
-
-        res.status(201).json(savedTask);
-    } catch (error) {
-        console.error('Erreur lors de l\'insertion de la tâche', error );
-        res.status(500).json({error: 'Erreur lors de l\'insertion de la tâche', error})
-    }
-});
-
-// UPDATE - Définir la route pour éditer une tâche
-app.put('/tasks/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { titre, completed, owner } = req.body;
-        const task = await Task.findByIdAndUpdate(id, {titre, completed, owner}, {new: true});
-    }
-    catch (error) {
-        console.error('Erreur lors de l\'édition de la tâche', error );
-        res.status(500).json({error: 'Erreur lors de l\'édition de la tâche', error})
-    }
-});
-
-// Logging the app start
-// Middleware pour les fichiers statiques du répertoire 'public
-// app.use('/static', express.static(path.join(__dirname, 'public')));
-
-app.use(express.urlencoded({ extended: true}));
-
-// Configuration pour pouvoir accéder aux fichiers statiques depuis le dossier views
-app.use(express.static(path.join(__dirname, 'views')));
-
 // Moteur de modèle de vue
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Gestionnaire de route pour afficher la page index.ejs
-app.get('/', (req, res) => {
-    const data = {
-        tasks : [
-            {id: 1, name: 'Tâche 1', completed: true, owner:"sylvie"},
-            {id: 2, name: 'Tâche 2', completed: true, owner: "sylvie"},
-            {id: 3, name: 'Tâche 3', completed: true, owner: "sylvie"},
-        ]
-    };
-    res.render('index', data); // Rend la page index.ejs
-});
+/**
+ *  Partie 3 - Les routes 
+ * */ 
 
-// Pour récupérer les tâches ajoutées par l'utilisateur
-app.post('/tasks', async (req, res) => {
-    try {
-        const {titre, completed} = req.body;
+// Routes pour la View
 
-        // Insérer la tâche dans la base de données MongoDB
-        const task = new Task({titre, completed});
-        const savedTask = await task.save();
-
-        res.status(201).json(savedTask);
-    } catch (error) {
-        console.error('Erreur lors de l\'insertion de la tâche ', error);
-        res.status(500).json({error: 'Erreur lors de l\'insertion de la tâche', error});
-    }
-})
+// Logging the app start
+// Middleware pour les fichiers statiques du répertoire 'public
+// app.use('/static', express.static(path.join(__dirname, 'public')));
 
 // Gestionnaire de route pour afficher la page 404.ejs
 app.get('/404', (req, res) => {
@@ -120,9 +78,117 @@ app.get('/login', (req, res) => {
 // Gestion de route pour accéder au fichier CSS
 app.get('/style.css', (req, res) => {
     res.setHeader('Content-Type', 'text/css');
-    res.sendFile(__dirname + 'views/style.css');
+    res.sendFile(__dirname + '/views/style.css');
+});
+
+// Controller
+
+// READ
+
+// Gestionnaire de route pour afficher la page index.ejs
+app.get('/', (req, res) => {
+    const data = {
+        tasks : [
+            {id: 1, titre: 'Tâche 1', completed: true, owner:"sylvie"},
+            {id: 2, titre: 'Tâche 2', completed: true, owner: "sylvie"},
+            {id: 3, titre: 'Tâche 3', completed: true, owner: "sylvie"},
+        ]
+    };
+    res.render('index', data); // Rend la page index.ejs
+});
+
+// Récupérer les tâches incluant les données de l'utilisateur
+app.get('/user/tasks', async (req, res) => {
+    // Pour récupérer les tâches ajoutées par l'utilisateur
+    try {
+        const { titre, completed, owner } = req.body;
+
+        // Insérer la tâche dans la base de données MongoDB
+        const task = new Task({titre, completed, owner});
+        const savedTask = await task.save();
+
+        res.status(201).json(savedTask);
+    } catch (error) {
+        console.error('Erreur lors de l\'insertion de la tâche ', error);
+        res.status(500).json({error: 'Erreur lors de l\'insertion de la tâche', error});
+    }
+
+    Task.find()
+    .populate('owner', 'name')
+    .exec((err, tasks) => {
+        if (err) {
+            console.error('Erreur lors de la récupération des tâches', err);
+        }
+        else {
+            // Pour afficher la liste des tâches avec les utilisateurs
+            res.render('index', { tasks });
+        }
+    });
+});
+
+// CREATE - Définir la route pour gérer les requêtes de l'interface
+app.post('/tasks', async (req, res) => {
+    try {
+        const { titre, completed, owner } = req.body;
+
+        // Insérer la tâche dans la base de données
+        const task = new Task({ titre, completed, owner });
+        const savedTask = await task.save();
+
+        res.status(201).json(savedTask);
+    } catch (error) {
+        console.error('Erreur lors de l\'insertion de la tâche', error );
+        res.status(500).json({error: 'Erreur lors de l\'insertion de la tâche', error})
+    }
+});
+
+// UPDATE - Définir la route pour éditer une tâche
+
+app.put('/tasks/:id', async (req, res) => {
+    try {
+
+        // Obtenir les données de la tâche
+        const task = {
+            id: req.params.id,
+            titre: req.body.titre,
+            completed: req.body.completed,
+            owner: req.body.owner.name,
+        }
+        
+        // Valider les données de la tâche
+        const errors = validationResult(req);
+
+        // Si erreur, les renvoyer
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ error: errors.array() });
+        }
+
+        // Renvoyer une réponse de réussite
+        res.status(200).json( { task });
+    }
+    catch (error) {
+        console.error('Erreur lors de l\'édition de la tâche', error );
+        res.status(500).json({error: 'Erreur lors de l\'édition de la tâche', error})
+    }
+});
+
+
+// DELETE - Définir la route pour supprimer une tâche
+app.delete('/tasks/:id', (req, res) => {
+    // Obtenir l'identifiant de la tâche à supprimer
+    const id = req.params.id;
+
+    // Supprimer la tâche
+    Task.findByIdAndDelete(id, (err, task) => {
+        if (err) {
+            console.error('Erreur lors de la suppression de la tâche', err);
+        }
+        else {
+            // Renvoyer une réponse de réussite
+            res.status(200).send('Tâche supprimée');
+        }
+    });
 })
-  
 
 
 const port = 3000;
