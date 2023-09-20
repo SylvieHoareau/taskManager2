@@ -11,9 +11,9 @@ import Task from './src/models/task.js';
 import pkg from 'validator';
 const { check, validationResult } = pkg;
 // import des fonctions du controller 
-// import addTask from './src/controller/addTask.js';
-// import editTask from './src/controller/editTask.js';
-// import deleteTask from './src/controller/deleteTask.js';
+import addTask from './src/controller/addTask.js';
+import editTask from './src/controller/editTask.js';
+import deleteTask from './src/controller/deleteTask.js';
 // import { taskRouter } from './src/routers/task.js';
 // import { userRouter } from './src/routers/user.js';
 
@@ -21,6 +21,7 @@ const { check, validationResult } = pkg;
  * Partie 1 : Configuration et initialisation
  * */
 
+// Configuration de variables d'environnement
 dotenv.config();
 
 // Obtenir le chemin actuel du module
@@ -109,7 +110,7 @@ app.get('/user/tasks', async (req, res) => {
 
         // Insérer la tâche dans la base de données MongoDB
         const task = new Task({titre, completed, owner});
-        const savedTask = await task.save();
+        savedTask = await task.save();
 
         res.status(201).json(savedTask);
     } catch (error) {
@@ -131,12 +132,16 @@ app.get('/user/tasks', async (req, res) => {
 });
 
 // CREATE - Définir la route pour gérer les requêtes de l'interface
+
+// Créer une nouvelle tâche
+
 app.post('/tasks', async (req, res) => {
     try {
         const { titre, completed, owner } = req.body;
 
         // Insérer la tâche dans la base de données
-    //    addTask({titre, completed, owner});
+       const task = new Task({titre, completed, owner});
+       savedTask = await task.save();
 
         res.status(201).json(savedTask);
     } catch (error) {
@@ -144,6 +149,25 @@ app.post('/tasks', async (req, res) => {
         res.status(500).json({error: 'Erreur lors de l\'insertion de la tâche', error})
     }
 });
+
+// Créer un nouvel utilisateur
+
+app.post('/login/users', async (req, res) => {
+    try {
+        const { name, age, email, password } = req.body;
+
+        // Insérer la tâche dans la base de données
+       const task = new Task({titre, completed, owner});
+       savedTask = await task.save();
+
+        res.status(201).json(savedTask);
+    } catch (error) {
+        console.error('Erreur lors de l\'insertion de la tâche', error );
+        res.status(500).json({error: 'Erreur lors de l\'insertion de la tâche', error})
+    }
+});
+
+
 
 // UPDATE - Définir la route pour éditer une tâche
 
@@ -161,7 +185,7 @@ app.put('/tasks/:id', async (req, res) => {
         }
         
         // Valider les données de la tâche
-    //    editTask(taskId, udpatedTask);
+        editTask(taskId, udpatedTask);
 
         // Renvoyer une réponse de réussite
         res.status(200).json( { message : 'Tâche éditée avec succès !' });
@@ -181,7 +205,7 @@ app.delete('/tasks/:id', (req, res) => {
         const taskId = req.params.id;
 
         // Appeler la fonction deleteTask
-        // deleteTask(taskId);
+        deleteTask(taskId);
 
         // Renvoyer une réponse de réussite
         res.status(200).send('Tâche supprimée');
@@ -192,7 +216,6 @@ app.delete('/tasks/:id', (req, res) => {
     }
   
 })
-
 
 const port = 3000;
 app.listen(port, () => console.log('Le serveur fonctionne !'));

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const deleteTask = (taskId) => {
     // Obtenir l'identifiant de la tâche à supprimer
-    const taskId = this.task.id;
+    // const taskId = this.task.id;
 
     // Envoyer une demande DELETE au backend
     axios.delete('/tasks' + taskId)

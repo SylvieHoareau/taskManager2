@@ -12,13 +12,14 @@
     <!--Lors de la mise en production, utilisez cette balise Vue JS-->
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.13/dist/vue.global.prod.js"></script>
     <script src="ejs.js"></script>
+    <script src="viewejs.js"></script>
     <title>To Do List | Login</title>
 </head>
 <body>
     <main>
         <div class="loginContainer">
             <h1>Login</h1>
-            <form>
+            <form action="/login/users">
                 <input type="text" name="name" id="name" aria-label="name" placeholder="Nom">
                 <input type="number" name="age" id="age" aria-label="age" placeholder="Age">
                 <input type="email" name="email" id="email" aria-label="email" placeholder="Email">

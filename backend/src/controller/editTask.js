@@ -5,7 +5,7 @@ import axios from 'axios';
 const editTask = (taskId, updatedTask) => {
 
     // Obtenir l'identifiant de la tâche à supprimer
-    const taskId = this.task.id;
+    // const taskId = this.task.id;
 
     // Envoyer une demande PUT au backend
     axios.put('/tasks/' + taskId, updatedTask)

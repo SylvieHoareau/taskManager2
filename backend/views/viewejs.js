@@ -1,4 +1,4 @@
-import axios from 'axios';
+// Script pour faire le lien entre le backend et le frontend
 
 // Ajouter une tâche 
 
@@ -33,7 +33,7 @@ const editTask = (taskId, updatedTask) => {
 
 const deleteTask = (taskId) => {
     // Obtenir l'identifiant de la tâche à supprimer
-    const taskId = this.task.id;
+    // const taskId = this.task.id;
 
     // Envoyer une demande DELETE au backend
     axios.delete('/tasks/' + taskId)

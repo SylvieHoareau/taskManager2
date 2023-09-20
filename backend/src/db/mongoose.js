@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 // Connexion à la base de données
 
 // La variable d'environnement MONGO_URL contient le lien pour se connecter à la database
-dotenv.config( { path: '../../../backend/.env' });
+dotenv.config({ path: '../../../backend/.env' });
 
 // Récupérer l'URL de la base de données à partir des variables d'environnement
 // const mongoURL = process.env.MONGO_URL;
@@ -19,13 +19,13 @@ mongoose.connect('mongodb+srv://admin:admin@localhost.7tofdzv.mongodb.net/', {us
         const collectionTask = db.collection('Task');
         //TEST
         const insertTasks = await collectionTask.insertMany([
-            { titre: "Apprendre SQL", completed: true , owner: 'sylvie', timestamp: new Date}, 
-            { titre: "Apprendre Vue JS", completed: false, owner: 'sylvie', timestamp: new Date}
+            { titre: "Apprendre PHP", completed: true , owner: 'admin', timestamp: new Date}, 
+            { titre: "Apprendre SQL", completed: false, owner: 'admin', timestamp: new Date}
         ]);
         const collectionUser = db.collection('User');
         const insertUsers = await collectionUser.insertMany([
-            { username: "olivier", password: "password2", email:'olivier@example.com', timestamp: new Date},
-            { username: "annette", password: "password2" , email:'annette@example.com', timestamp: new Date},
+            { username: "paul", password: "password4", email:'paul@example.com', timestamp: new Date},
+            { username: "pierre", password: "password6" , email:'pierre@example.com', timestamp: new Date},
         ]);
         console.log(`Documents insérés => ${insertTasks} + ${insertUsers}`);
     })

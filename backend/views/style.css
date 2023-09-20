@@ -34,6 +34,7 @@ header h1 {
 header button {
     color: var(--secondary-color);
     background-color: var(--bg-color);
+    width: 25%;
 }
 
 header button:hover {
@@ -43,7 +44,14 @@ header button:hover {
 
 header button a {
     color: var(--secondary-color);
+    font-size: 1rem;
     font-weight: 700;
+}
+
+header img {
+    width: 5em;
+    height: 5em;
+    border-radius: 100%;
 }
 
 main {
@@ -67,6 +75,7 @@ section {
 
 ul {
     list-style-type: none;
+    width: 80vw;
 }
 
 li {
@@ -93,7 +102,7 @@ li a {
     align-content: center;
     justify-content: flex-start;
     gap: 1em;
-    width: 30em;
+    width: 100%;
     background-color: var(--tertiary-color);
     margin: 1em;
     padding: 1em;
@@ -101,7 +110,7 @@ li a {
 
 #taskTitre {
     font-size: 1.25rem;
-    width: 15em;
+    width: 100%;
 }
 
 #taskOwner {
@@ -116,7 +125,7 @@ li a {
     background-color: var(--accent-color);
     margin: 1em;
     padding: 1em;
-    width: 10em;
+    width: 100%;
 }
 
 form {
@@ -157,7 +166,7 @@ input[type="submit"] {
     background-color: var(--secondary-color);
     font-weight: 700;
     padding: 1em;
-    width: 15em;
+    width: 100%;
 }
 
 input[type="submit"]:hover {
@@ -188,7 +197,7 @@ h1 {
 p {
     color: white;
     text-align: center;
-    font-size: 2.5rem;
+    font-size: 1.25rem;
 }
 
 img {
@@ -223,6 +232,12 @@ button:hover {
 }
 
 @media screen and (min-width: 320px) and (max-width: 1024px){
+    
+    ul {
+        list-style-type: none;
+        width: 100%;
+    }
+
     li {
         display: flex;
         flex-direction: column;

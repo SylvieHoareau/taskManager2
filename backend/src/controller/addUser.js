@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-// Ajouter une tâche 
+// Ajouter un utilisateur
 
-const addTask = async (newTask) => {
+const addUser = async (newUser) => {
     try {
         // Envoyer une demande POST au backend
-        const task = await axios.post('/tasks', newTask);
+        const task = await axios.post('/login/users', newUser);
         if (!task) {
-            throw new Error('Erreur lors de la récupération de la tâche');
+            throw new Error('Erreur lors de l\'enregistrement de l\'utilisateur');
         }
         return task;
     } catch (error) {
@@ -15,4 +15,4 @@ const addTask = async (newTask) => {
     }
 }
 
-export default addTask;
+export default addUser;
