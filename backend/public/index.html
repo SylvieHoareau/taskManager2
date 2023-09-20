@@ -5,39 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!--Importer la bibliothèque Vue JS-->
+    <script src="https://unpkg.com/vue@next"></script>
+    <!--Lors de la mise en production, utilisez cette balise Vue JS-->
+    <!-- <script src="https://unpkg.com/vue.js"></script> -->
+    <script>
+        const app = Vue.createApp ( {
+            data() {
+                return {
+                    tasks: [
+                        {id: 1, name: 'Tâche 1', completed:true}, 
+                        {id: 2, name: 'Tâche 2', completed:true}, 
+                        {id: 3, name: 'Tâche 3', completed:true}, 
+                    ],
+                    newTaskName: ''
+                }
+            }, 
+            methods: {
+                addTask() {
+                    // Ajouter une nouvelle tâche à la liste de tâche
+                    this.tasks.push( {
+                        id: this.tasks.length + 1,
+                        name: this.newTaskName,
+                        completed: false
+                    });
+
+                    // Réinitialiser le champ de texte
+                    this.newTaskName = '';
+                }, 
+                editTask(task) {
+                    console.log('Edition de la tâche : ', task);
+                }, 
+                deleteTask(task) {
+                    // Logique de suppression de la tâche
+                    console.log('Suppression de la tâche : ', task);
+                }
+            }
+        });
+        app.mount('#app');
+    </script>
     <title>To Do List</title>
 </head>
 <body>
     <header>
         <h1>To Do List</h1>
-        <a><i class="fa-solid fa-user"></i></a>
+        <a href="login.html" target="_blank"><i class="fa-solid fa-user"></i></a>
     </header>
     <main>
         <section>
             <ul>
-                <li>
-                    <input type="checkbox" name="completed" id="task1" aria-label="task1" checked="checked"/>
-                    <a href="#">Tâche 1</a>
-                    <i class="fa-solid fa-pen-to-square"></i>
-                    <i class="fa-solid fa-trash"></i>
-                </li>
-                <li>
-                    <input type="checkbox" name="completed" id="task2" aria-label="task2"/>
-                    <a href="#">Tâche 2</a>
-                    <i class="fa-solid fa-pen-to-square"></i>
-                    <i class="fa-solid fa-trash"></i>
-                </li>
-                <li>
-                    <input type="checkbox" name="completed" id="task3" aria-label="task3"/>
-                    <a href="#">Tâche 3</a>
-                    <i class="fa-solid fa-pen-to-square"></i>
-                    <i class="fa-solid fa-trash"></i>
+                <li v-for="task in tasks" :key="task.id">
+                    <!--Utiliser v-model pour lier l'état de la case à cocher à une propriété dans l'objet Vue-->
+                    <input type="checkbox" name="completed" :id="task1" aria-label="task.id" v-model="task.completed"/>
+                    <!--Affiche le nom de la tâche-->
+                    <a href="#"> {{ task.name }} </a>
+                    <!--Ajouter des clicks pour générer l'édition-->
+                    <i class="fa-solid fa-pen-to-square" @click="editTask(task)"></i>
+                    <i class="fa-solid fa-trash" @click="deleteTask(task)"></i>
                 </li>
             </ul>
         </section>
         <section>
-            <form>
-                <input type="text" placeholder="Ajouter une tâche">
+            <form @submit.prevent="addTask">
+                <input type="text" placeholder="Ajouter une tâche" v-model="newTaskName">
                 <input type="submit" value="Ajouter">
             </form>
         </section>
@@ -45,6 +75,6 @@
     <footer>
         &copy; 2023
     </footer>
-    <script src="script.js"></script>
+    
 </body>
 </html>

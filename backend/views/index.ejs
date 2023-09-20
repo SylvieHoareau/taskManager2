@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!--Style CSS-->
+    <link rel="stylesheet" href="../style.css">
+    <!--Importer la bibliothèque Vue JS-->
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <!--Lors de la mise en production, utilisez cette balise Vue JS-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.13/dist/vue.global.prod.js"></script>
+    <script src="ejs.js"></script>
+    <title>To Do List | Accueil</title>
+</head>
+<body>
+    <header>
+        <h1>To Do List</h1>
+        <button><a href="/login">Se connecter</a></button>
+    </header>
+    <main>
+        <section>
+            <ul>
+                    <li v-for="task in tasks" :key="task.id">
+                        <!--Utiliser v-model pour lier l'état de la case à cocher à une propriété dans l'objet Vue-->
+                        <input type="checkbox" name="completed" :id="'task-' + task.id" aria-label="task.id" v-model="task.titre"/>
+                        <!--Affiche le nom de la tâche-->
+                        <!--Si je ne peux pas éditer la tâche-->
+                        <p v-if="!task.editing">{{ task.titre }}</p>
+                        <!--Si je peux éditer la tâche-->
+                        <input v-else v-model ="task.titre" @blur="saveEditedTask(task)" @keydown.enter="saveEditedTask(task)" placeholder="Editer la tâche"/>
+                        <!--Affiche le nom de l'auteur de la tâche-->
+                        <span id="taskOwner">{{ task.owner.name }}</span>
+                        <!--Ajouter des clicks pour générer l'édition-->
+                        <button @click="editTask(task)">{{  task.editing ? 'Enregistrer' : 'Editer' }} </button>
+                        <button @click="deleteTask(task.id)">Supprimer</button>
+                    </li>
+            </ul>
+        </section>
+        <section>
+            <form action="/tasks" method="POST" @submit.prevent="addTask">
+                <input type="text" placeholder="Ajouter une tâche" v-model="newTaskName" :id="'task-input-' + uniqueId">
+                <input type="submit" value="Ajouter">
+            </form>
+        </section>
+    </main>
+    <footer>
+        &copy; 2023
+    </footer>
+
+    <script>
+        const app = Vue.createApp( {
+            data()  {
+                return {
+                    // Initialiser la variable uniqueId
+                    uniqueId: 0,
+                    tasks: [], 
+                    newTaskName: '',
+                };
+            }, 
+            watch: {
+                tasks: {
+                    handler(newTasks) {
+                        // Emettre l'évenement pour mettre à jour la tâche dans le props parent
+                        this.$emit('update:tasks',  newTasks);
+                    },
+                    deep: true,
+                } 
+            },
+            methods: {
+                // CREATE TASK
+                addTask() {
+                   // Axios pour ajouter un tâche via l'API
+                   axios.post('/api/tasks', { titre: this.newTaskName})
+                   .then(response => {
+                        // Récupérer les nouvelles tâches
+                        this.tasks.push(response.data);
+                        this.newTaskName = '';
+                   })
+                   .catch(error => {
+                        console.log('Erreur lors de l\'ajout de la tâche', error);
+                   })
+
+                }, 
+                // UPDATE TASK
+                updateTasks(newTasks) {
+                    this.tasks = newTasks;
+                }, 
+                edit(task) {
+                    console.log(`Edition de la tâche : ${task.titre}`);
+                },
+                saveEditedTask(task) {
+                    task.editing = false;
+                    console.log(`Tâche éditée : ${task.titre}`);
+                },
+                // DELETE TASK
+                deleteTask(task) {
+                    // Créer une copie de localTasks en excluant la tâche avec taskId
+                    const updatedTasks = this.localTasks.filter(task => task.id !== taskId);
+                    // Utilisez $emit pour mettre à jour la prop task
+                    this.$emit('updateTask', updatedTasks);
+                    console.log(`Suppression de la tâche avec l'ID : ${taskId}`);
+                }, 
+                created() {
+                    axios.get('/api/tasks')
+                    .then(response => {
+                        this.tasks = response.data;
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la récupération des tâches', error);
+                    })
+                }
+            } 
+
+        });
+
+        // Récupérer les tâches incluant les données de l'utilisateur
+        Task.find()
+        .populate('owner', 'name')
+        .exec((err, tasks) => {
+            if (err) {
+                console.error('Erreur lors de la récupération des tâches', err);
+            }
+            else {
+                // Pour afficher la liste des tâches avec les utilisateurs
+                res.render('index', { tasks });
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+</html>

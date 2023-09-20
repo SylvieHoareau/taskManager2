@@ -7,22 +7,30 @@ const taskRouter = express.Router();
 
 // CREATE a task
 
-taskRouter.post('/tasks', auth, async( req, res) => {
-    const task = new Task( {
-        ...req.body, // ... spread operator toutes les propriétés de l'objet req.body sont copiées dans l'objet task
-        owner: req.user._id,
+taskRouter.post('/addTask', auth, async( req, res) => {
+
+    // Récupérer le nom de la tâche
+    const { name } = req.body;
+    // Créer une nouvelle instance du modèle Task
+    const newTask = new Task( {
+        name: name,
+        completed: false,
+        user: req.user._id
     });
-    try {
-        await task.save();
-        res.status(200).send("Tâche sauvegardée : " + task);
-    } catch (error) {
-        res.status(400).send(error);
-    }
+
+    newTask.save()
+        .then((task) => {
+            console.log('Tâche ajoutée avec succés :', task);
+            res.status(200).send(task);
+    })
+    .catch((error) => { 
+        console.error('Erreur lors de l\'ajout de la tâche : ', error);
+    });
 });
 
 // READ a task
 
-taskRouter.get('/tasks', auth, async( req, res) => {
+taskRouter.get('/readTask', auth, async( req, res) => {
     const match = {};
     const sort = {};
     if (req.query.completed) {
@@ -52,6 +60,8 @@ taskRouter.get('/tasks', auth, async( req, res) => {
         // Exécute la liste des tâches
         .execPopulate();
         res.send(req.user.tasks);
+        // Affiche les tâches sur la page index.ejs
+        res.render('pages/index', newTask);
     } catch (error) {
         res.status(500).send(error);
     }
@@ -61,7 +71,7 @@ taskRouter.get('/tasks', auth, async( req, res) => {
 
 // CREATE
 
-taskRouter.get('tasks/:id', auth, async(req, res) => {
+taskRouter.get('addTask/:id', auth, async(req, res) => {
     const _id = req.params.id;
     try {
         const task = await Task.findOne({ _id, owner: req.user._id });
@@ -76,7 +86,7 @@ taskRouter.get('tasks/:id', auth, async(req, res) => {
 
 // UPDATE
 
-taskRouter.patch('/tasks/:id', auth, async(req, res) => {
+taskRouter.patch('/updateTask/:id', auth, async(req, res) => {
     const updates = Object.keys(req.body);
     const allowedUpdates = ['task', 'completed'];
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));

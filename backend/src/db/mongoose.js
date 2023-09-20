@@ -1,61 +1,34 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 // Connexion à la base de données
 
-const client = new MongoClient(process.env.MONGODB_URL, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        depreciationErrors: true,
-    }
-});
+// La variable d'environnement MONGO_URL contient le lien pour se connecter à la database
+dotenv.config( { path: '../../../backend/.env' });
 
-async function run() {
-    try {
-        await client.connect();
-        // Envoyer un ping pour confirmer que la connexion a réussi
-        // await client.db("admin").command({ping: 1});
-        // console.log("Ping ! Vous êtes connecté(e) à MongoDB !");
+// Récupérer l'URL de la base de données à partir des variables d'environnement
+// const mongoURL = process.env.MONGO_URL;
 
-        // Test insertion de données dans la BDD
-
-        const db = client.db('todolist');
-        const coll = db.collection('tasks');
-
-        const tasks = [
-            { 
-                Task: 'apprendre MongoDB', 
-                completed: true,
-                owner: 'sylvie',
-            }, 
-            { 
-                Task: 'apprendre Node JS', 
-                completed: true,
-                owner: 'sandrine',
-            },
-            { 
-                Task: 'apprendre Vue JS', 
-                completed: false,
-                owner: 'sylvie',
-            },
-        ];
-
-        const result = await coll.insertMany(docs);
-
-        // Afficher le résultat
-        console.log(result.insertedIds);
-    } finally {
-        // S'assurer que la connexion se ferme
-        await client.close();
-        
-    }
-}
-
-run().catch(console.dir);
-
-// mongoose.connect(process.env.MONGODB_URL, {
-//     useNewUrlParser: true,
-//     useCreateIndex: true,
-//     useUnifiedTopology: true,
-// });
-
+// Connexion à la base de données MongoDB
+mongoose.connect('mongodb+srv://admin:admin@localhost.7tofdzv.mongodb.net/', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(async () => {
+        console.log('Connexion réussie à la base de données MongoDB');
+        // Interactions avec la base de données
+        const db = mongoose.connection;
+        // Je crée une collection (équivalent de la table en SQL)
+        const collectionTask = db.collection('Task');
+        //TEST
+        const insertTasks = await collectionTask.insertMany([
+            { titre: "Apprendre SQL", completed: true }, 
+            { titre: "Apprendre Vue JS", completed: false }
+        ]);
+        const collectionUser = db.collection('User');
+        const insertUsers = await collectionUser.insertMany([
+            { username: "julio", password: "password1" },
+            { username: "nano", password: "password2" },
+        ]);
+        console.log(`Documents insérés => ${insertTasks} + ${insertUsers}`);
+    })
+    .catch((error) => {
+        console.error('Erreur de connexion à la base de données MongoDB', error);
+    });

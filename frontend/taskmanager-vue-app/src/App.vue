@@ -10,9 +10,10 @@
 </template>
 
 <script>
-  import AppHeader from './components/AppHeader.vue';
-  import TaskForm from './components/TaskForm.vue';
-  import TaskList from './components/TaskList.vue';
+  import AppHeader from '../components/AppHeader.vue';
+  import TaskForm from '../components/TaskForm.vue';
+  import TaskList from '../components/TaskList.vue';
+  import validation from '../components/validation.js';
 
   export default {
     name: 'App',
@@ -34,6 +35,10 @@
       }, 
       upadateTasks(newTasks) {
         this.tasks = newTasks;
+      },   
+      validate(data) {
+        // Utiliser le module `validation` pour valider les données
+        return validation.methods.validate(data);
       }
     }
   }

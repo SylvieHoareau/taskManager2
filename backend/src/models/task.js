@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 
-const taskSchema = new mongoose.Schema( {
-    Task : {
+const Schema = mongoose.Schema;
+
+const taskSchema = new Schema( {
+    titre : {
         type:String,
         required: true,
     },
@@ -11,7 +13,7 @@ const taskSchema = new mongoose.Schema( {
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId, 
-        required: true,
+        // required: true,
         ref: 'User',
     },
 },

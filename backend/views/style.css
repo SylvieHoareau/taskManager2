@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-
 :root {
     --primary-color: #2AB840;
     --secondary-color: #FF2B5E;
@@ -8,6 +7,7 @@
     --accent-color: #72FC87;
     --bg-color: #000000;
 }
+
 * {
     margin: 0;
     padding: 0;
@@ -22,7 +22,6 @@ body {
 header {
     background-color: var(--secondary-color);
     padding: 1em;
-    box-shadow: 0.5em 0.5em 0.5em rgba(187, 107, 126, 0.5);
     display: flex;
     justify-content: space-around;
 }
@@ -37,7 +36,6 @@ main {
     background-color: var(--primary-color);
     margin: 5em;
     padding: 1em;
-    box-shadow: 0.5em 0.5em 0.5em rgba(255, 255, 255, 0.5);
     border: none;
     border-radius: 2.5em;
     display: flex;
@@ -70,6 +68,22 @@ li a {
     color: black;
     text-decoration: none;
     font-size: 1.5rem;
+    margin: 1em;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+input {
+    padding: 1em;
+    margin: 1em;
+    border-radius: 1em;
 }
 
 input[type="checkbox"] {
@@ -113,6 +127,7 @@ h1 {
     font-weight: 700;
     letter-spacing: 0.25em;
     text-align: center;
+    text-transform: uppercase;
 }
 
 p {
@@ -134,4 +149,20 @@ a {
     cursor: pointer;
     padding: 1em;
     font-size: 1.5em;
+}
+
+button {
+    color: var(--bg-color);
+    background-color: var(--primary-color);
+    border: 0.25 em solid black;
+    border-radius: 1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 1em;
+    width: 10em;
+}
+
+button:hover {
+    color: var(--bg-color);
+    background-color: var(--secondary-color);
 }
