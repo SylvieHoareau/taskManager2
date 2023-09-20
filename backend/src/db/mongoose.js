@@ -19,13 +19,13 @@ mongoose.connect('mongodb+srv://admin:admin@localhost.7tofdzv.mongodb.net/', {us
         const collectionTask = db.collection('Task');
         //TEST
         const insertTasks = await collectionTask.insertMany([
-            { titre: "Apprendre SQL", completed: true }, 
-            { titre: "Apprendre Vue JS", completed: false }
+            { titre: "Apprendre SQL", completed: true , owner: 'sylvie', timestamp: new Date}, 
+            { titre: "Apprendre Vue JS", completed: false, owner: 'sylvie', timestamp: new Date}
         ]);
         const collectionUser = db.collection('User');
         const insertUsers = await collectionUser.insertMany([
-            { username: "julio", password: "password1" },
-            { username: "nano", password: "password2" },
+            { username: "olivier", password: "password2", email:'olivier@example.com', timestamp: new Date},
+            { username: "annette", password: "password2" , email:'annette@example.com', timestamp: new Date},
         ]);
         console.log(`Documents insérés => ${insertTasks} + ${insertUsers}`);
     })

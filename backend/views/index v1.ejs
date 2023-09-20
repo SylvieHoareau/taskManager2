@@ -6,12 +6,18 @@
     <link rel="stylesheet" type="text/css" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!--Style CSS-->
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="/style.css">
+    <!--Importer la bibliothèque Vue JS pour le développement-->
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <!--Lors de la mise en production, utilisez cette balise Vue JS-->
+    <!--Logique d'interaction-->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@3.2.13/dist/vue.global.prod.js"></script> -->
     <!--Import d'Axios pour interagir avec la base de données en backend-->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!--Logique d'affichage des données-->
     <script src="ejs.js"></script>
     <!--Logique d'affichage de l'application côté front-->
+    <!-- <script src="view.js"></script> -->
     <script src="viewejs.js"></script>
     <title>To Do List | Accueil</title>
 </head>
@@ -19,14 +25,14 @@
     
     <header>
         <h1>To Do List</h1>
-        <button><a href="/login">Se connecter</a></button>
+        <button><a href="/login">Login</a></button>
     </header>
     <main>
         <div id="app">
             <section>
                 <ul>
                     <% for (const task of tasks) { %>
-                        <li>
+                        <li v-for="task in tasks" :key="task.id">
                             <div class="oneTask">
                                 <!--Utiliser v-model pour lier l'état de la case à cocher à une propriété dans l'objet Vue-->
                                 <input type="checkbox" name="completed" :id="'task-' + task.id" aria-label="task.id" v-model="task.titre"/>
@@ -36,28 +42,30 @@
                                     <!--Si je peux éditer la tâche-->
                                     <input v-model ="task.titre" @blur="saveEditedTask(task)" @keydown.enter="saveEditedTask(task)" placeholder="Editer la tâche"/>
                                 <% } else { %>
-                                    <p > <%=  task.titre %> </p>
+                                    <p id="taskTitre"> <%=  task.titre %></p>
                                 <% } %>
                             </div>
                             <!--Affiche le nom de l'auteur de la tâche-->
-                            <span id="taskOwner"><%= task.owner.name  %> </span>
-                              <!-- Formulaire d'édition -->
-                            <form action="/tasks/<%= task.id %>" method="POST">
-                                <input type="hidden" name="_method" value="PUT">
-                                <input type="submit" value="<%= task.editing ? 'Enregistrer' : 'Editer' %>" />
+                            <span id="taskOwner"><%= task.owner  %> </span>
+                            <!--Ajouter des clicks pour générer l'édition-->
+                            <!--Formulaire d'édition-->
+                            <form action="/tasks" method="POST" @submit.prevent="editTask">
+                                <input type="hidden" name="taskId" v-model="task.id" />
+                                <input type="submit" value="<%= task.editing ? 'Enregistrer' : 'Editer'   %>"">
                             </form>
-                            <!-- Formulaire de suppression -->
-                            <form action="/tasks/<%= task.id %>" method="POST">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="submit" value="Supprimer" />
+                            <!--Formulaire de suppression-->
+                            <form action="/tasks" method="POST" @submit.prevent="deleteTask">
+                                <input type="hidden" name="taskId" v-model="task.id" />
+                                <input type="submit" value="Supprimer">
                             </form>
                         </li>
                     <% } %>
                 </ul>
             </section>
             <section>
-                <form action="/tasks" method="POST" @submit.prevent="addTask">
-                    <input type="text" placeholder="Ajouter une tâche" v-model="newTaskName" :id="'task-input-' + uniqueId">
+                <form action="/tasks" method="POST" >
+                    <input type="hidden" name="taskId" v_model="task.id">
+                    <input type="text" placeholder="Ajouter une tâche" required>
                     <input type="submit" value="Ajouter">
                 </form>
             </section>

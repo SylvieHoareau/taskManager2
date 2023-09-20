@@ -93,7 +93,7 @@ li a {
     align-content: center;
     justify-content: flex-start;
     gap: 1em;
-    width: 20em;
+    width: 30em;
     background-color: var(--tertiary-color);
     margin: 1em;
     padding: 1em;
@@ -101,6 +101,7 @@ li a {
 
 #taskTitre {
     font-size: 1.25rem;
+    width: 15em;
 }
 
 #taskOwner {
@@ -115,6 +116,7 @@ li a {
     background-color: var(--accent-color);
     margin: 1em;
     padding: 1em;
+    width: 10em;
 }
 
 form {
@@ -151,10 +153,11 @@ input[type="text"] {
 input[type="submit"] {
     border:none;
     border-radius: 1em;
-    color: black;
+    color: white;;
     background-color: var(--secondary-color);
     font-weight: 700;
     padding: 1em;
+    width: 15em;
 }
 
 input[type="submit"]:hover {
@@ -227,6 +230,14 @@ button:hover {
         align-content: center;
         justify-content: center;
         gap: 1em;
+        width: 100%;
+    }
+
+    .oneTask {
+        width: 100%;
+    }
+
+    #taskOwner {
         width: 100%;
     }
     

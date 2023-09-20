@@ -56,6 +56,8 @@ userSchema.virtual('tasks', {
     foreignField: "owner",
 });
 
+// Recherche par email
+
 userSchema.statics.findCredentials = async(email, password) => {
     const user = await User.findOne({ email });
     // S'il n'y a pas d'utilisateur
@@ -70,6 +72,8 @@ userSchema.statics.findCredentials = async(email, password) => {
     return user;
 }
 
+// Générer un token
+
 userSchema.methods.generateAuthToken = async() => {
     const user = this;
     const token = jwt.sign({_id: this._id}, process.env.JWT_SECRET);
@@ -79,6 +83,7 @@ userSchema.methods.generateAuthToken = async() => {
 }
 
 // Renvoyer les données d'utilisateurs
+
 userSchema.methods.toJSON = () => {
     const user = this;
     const userObject = user.toObject();

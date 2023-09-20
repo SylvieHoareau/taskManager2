@@ -10,6 +10,10 @@ import Task from './src/models/task.js';
 // import { check, validationResult } from 'validator';
 import pkg from 'validator';
 const { check, validationResult } = pkg;
+// import des fonctions du controller 
+// import addTask from './src/controller/addTask.js';
+// import editTask from './src/controller/editTask.js';
+// import deleteTask from './src/controller/deleteTask.js';
 // import { taskRouter } from './src/routers/task.js';
 // import { userRouter } from './src/routers/user.js';
 
@@ -132,8 +136,7 @@ app.post('/tasks', async (req, res) => {
         const { titre, completed, owner } = req.body;
 
         // Insérer la tâche dans la base de données
-        const task = new Task({ titre, completed, owner });
-        const savedTask = await task.save();
+    //    addTask({titre, completed, owner});
 
         res.status(201).json(savedTask);
     } catch (error) {
@@ -147,8 +150,10 @@ app.post('/tasks', async (req, res) => {
 app.put('/tasks/:id', async (req, res) => {
     try {
 
+        const taskId = req.params.id;
+
         // Obtenir les données de la tâche
-        const task = {
+        const udpatedTask = {
             id: req.params.id,
             titre: req.body.titre,
             completed: req.body.completed,
@@ -156,15 +161,10 @@ app.put('/tasks/:id', async (req, res) => {
         }
         
         // Valider les données de la tâche
-        const errors = validationResult(req);
-
-        // Si erreur, les renvoyer
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ error: errors.array() });
-        }
+    //    editTask(taskId, udpatedTask);
 
         // Renvoyer une réponse de réussite
-        res.status(200).json( { task });
+        res.status(200).json( { message : 'Tâche éditée avec succès !' });
     }
     catch (error) {
         console.error('Erreur lors de l\'édition de la tâche', error );
@@ -172,22 +172,25 @@ app.put('/tasks/:id', async (req, res) => {
     }
 });
 
-
 // DELETE - Définir la route pour supprimer une tâche
+
 app.delete('/tasks/:id', (req, res) => {
     // Obtenir l'identifiant de la tâche à supprimer
-    const id = req.params.id;
+    try {
+        // Obtenir l'identifiant de la tâche à supprimer
+        const taskId = req.params.id;
 
-    // Supprimer la tâche
-    Task.findByIdAndDelete(id, (err, task) => {
-        if (err) {
-            console.error('Erreur lors de la suppression de la tâche', err);
-        }
-        else {
-            // Renvoyer une réponse de réussite
-            res.status(200).send('Tâche supprimée');
-        }
-    });
+        // Appeler la fonction deleteTask
+        // deleteTask(taskId);
+
+        // Renvoyer une réponse de réussite
+        res.status(200).send('Tâche supprimée');
+        
+    } catch (error) {
+        console.error('Erreur lors de la suppression de la tâche', error);
+        res.status(500).json({error: 'Erreur lors de la suppression de la tâche', error})
+    }
+  
 })
 
 
